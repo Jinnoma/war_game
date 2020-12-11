@@ -12,4 +12,9 @@ public enum MilitaryRank {
     public int getRankValue(){
         return this.rank;
     }
+    public int getNextRank(int currentRank) {
+        if () {
+            ret
+        }
+    }
 }

@@ -21,8 +21,30 @@ public class General {
     public void buySoldier(MilitaryRank militaryRank, double strength){
         soldiers.add(new Soldier(militaryRank, strength));
         this.coins = coins - 10 * militaryRank.getRankValue();
-
     }
+    public ArrayList<Soldier> getSoldiers(){
+        return soldiers;
+    }
+    public Soldier getSoldier(){
+        return soldier;
+    }
+
+    public double getSoldiersStrength(){
+        double soldiersStrength = 0;
+        for(Soldier s : soldiers) {
+            soldiersStrength += s.getStrength();
+        }
+        return soldiersStrength;
+    }
+
+    public void attack(General general){
+        if (getSoldiersStrength() > general.getSoldiersStrength()){
+            for(Soldier s : general.getSoldiers()){
+                s.setStrength(s.getStrength()-1);
+            }
+        }
+        }
+    };
 
 
 
