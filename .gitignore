@@ -1,6 +1,6 @@
 # Compiled class file
 *.class
-
+.circleci
 # Log file
 *.log
 

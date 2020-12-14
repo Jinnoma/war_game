@@ -1,5 +1,3 @@
-import java.nio.charset.MalformedInputException;
-
 public class Soldier {
     private MilitaryRank militaryRank;
     private int experience;

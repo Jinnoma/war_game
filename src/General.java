@@ -1,3 +1,5 @@
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -5,10 +7,20 @@ public class General {
     private ArrayList<Soldier> soldiers = new ArrayList<>();
     private int coins;
     private Soldier soldier;
+    private PropertyChangeSupport support;
 
 
     public General(int coins) {
         this.coins = coins;
+        support = new PropertyChangeSupport(this);
+    }
+
+    public void addPropertyChangeListener(PropertyChangeListener pcl) {
+        support.addPropertyChangeListener(pcl);
+    }
+
+    public void removePropertyChangeListener(PropertyChangeListener pcl) {
+        support.removePropertyChangeListener(pcl);
     }
 
     public int getCoins() {
@@ -19,7 +31,9 @@ public class General {
         if (coins < 0) {
             throw new IllegalArgumentException("Not enough money");
         }
+        support.firePropertyChange("cois", this.coins, coins);
         this.coins = coins;
+
     }
 
     public void buySoldier(MilitaryRank militaryRank) {

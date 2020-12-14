@@ -14,7 +14,7 @@ public class SoldierTests {
 
     @Test
     public void promote(){
-        soldier.setExperience(20);
+        soldier.setExperience(15);
         MilitaryRank result = soldier.getMilitaryRank();
         MilitaryRank expected = MilitaryRank.MAJOR;
         assertEquals(expected, result);
