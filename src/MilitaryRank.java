@@ -9,12 +9,14 @@ public enum MilitaryRank {
         this.rank = rank;
     }
 
-    public int getRankValue(){
+    public int getRankValue() {
         return this.rank;
     }
-    public int getNextRank(int currentRank) {
-        if () {
-            ret
-        }
+
+    public MilitaryRank getNextRank() {
+        return this.ordinal() < MilitaryRank.values().length - 1
+                ? MilitaryRank.values()[this.ordinal() + 1]
+                : null;
     }
 }
+

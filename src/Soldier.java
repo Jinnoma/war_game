@@ -1,23 +1,32 @@
+import java.nio.charset.MalformedInputException;
+
 public class Soldier {
     private MilitaryRank militaryRank;
-    private double experience;
-    private double strength;
+    private int experience;
+    private int strength;
 
-    public Soldier(MilitaryRank militaryRank, double strength) {
+    public Soldier(MilitaryRank militaryRank) {
         setMilitaryRank(militaryRank);
-        setStrength(strength);
-        this.experience = 1;
+        setExperience(1);
+        setStrength();
     }
 
     public MilitaryRank getMilitaryRank() {
         return militaryRank;
     }
 
-    public double getExperience() {
+    public void setExperience(int experience){
+        this.experience = experience;
+        if (this.experience >= 5 * this.militaryRank.getRankValue() && militaryRank != MilitaryRank.MAJOR) {
+            promote();
+        }
+    }
+
+    public int getExperience() {
         return experience;
     }
 
-    public double getStrength() {
+    public int getStrength() {
         return strength;
     }
 
@@ -30,14 +39,16 @@ public class Soldier {
         this.militaryRank = militaryRank;
     }
 
-    public void setStrength(double strength) {
+    public void setStrength() {
         this.strength = this.experience * this.militaryRank.getRankValue();
     }
 
     public void promote(){
-        if (this.experience == 5 * this.militaryRank.getRankValue()) {
-            this.militaryRank = militaryRank.getRankValue() + 1;
+            setMilitaryRank(getMilitaryRank().getNextRank());
         }
+
+    public void expDecrement(){
+        this.experience = experience - 1;
     }
 
 }
