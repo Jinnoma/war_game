@@ -1,11 +1,4 @@
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
+public interface Secretary{
+    void update(Object o);
 
-public class Secretary implements PropertyChangeListener {
-    private int coins;
-
-    public void propertyChange(PropertyChangeEvent evn) {
-//        this.setCoins((int) evn.getNewValue());
-
-    }
 }
