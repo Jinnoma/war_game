@@ -14,8 +14,8 @@ public class GeneralTests {
 
     @Before
     public void setup() {
-        firstGeneral = new General(100);
-        secondGeneral = new General(100);
+        firstGeneral = new General("First",100);
+        secondGeneral = new General("Second",100);
 
         firstGeneral.buySoldier(MilitaryRank.PRIVATE);
         firstGeneral.buySoldier(MilitaryRank.MAJOR);
@@ -67,4 +67,5 @@ public class GeneralTests {
         result.add(secondGeneral.getSoldiers().size());
         Assert.assertEquals(expected, result);
     }
+
 }

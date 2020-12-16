@@ -1,16 +1,24 @@
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class General {
+public class General implements Serializable {
     private ArrayList<Soldier> soldiers = new ArrayList<>();
     private ArrayList<Secretary> secretary = new ArrayList<>();
     private int coins;
     private Soldier soldier;
+    private String name;
 
-    public General(int coins) {
+    public General() {
+    }
+
+    public General(String name, int coins) {
         this.coins = coins;
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getCoins() {
@@ -22,16 +30,21 @@ public class General {
             throw new IllegalArgumentException("Not enough money");
         }
         this.coins = coins;
-        for (Secretary s : this.secretary) {
-            s.update(this.coins);
-        }
 
+
+    }
+
+    public void attach(Secretary s) {
+        secretary.add(s);
     }
 
     public void buySoldier(MilitaryRank militaryRank) {
         soldier = new Soldier(militaryRank);
         soldiers.add(soldier);
         setCoins(this.coins - 10 * militaryRank.getRankValue());
+        for (Secretary s : secretary) {
+            s.updateSoldiers();
+        }
     }
 
     public ArrayList<MilitaryRank> getSoldiersRank() {
@@ -53,6 +66,9 @@ public class General {
             cost += soldiers.get(i).getMilitaryRank().getRankValue();
         }
         setCoins(getCoins() - cost);
+        for (Secretary s : secretary) {
+            s.updateMilitaryTraining(cost, soldierIndexes.size());
+        }
     }
 
     public ArrayList<Soldier> getSoldiers() {
@@ -70,19 +86,23 @@ public class General {
     public void attack(General general) {
         Random rand = new Random();
         ArrayList<Soldier> toRemove = new ArrayList<>();
-
+        int attackerCoinsWon = general.getCoins() * 10 / 100;
+        int defenderCoinsWon = getCoins() * 10 / 100;
         int rand_int1 = rand.nextInt(getSoldiers().size());
         int rand_int2 = rand.nextInt(general.getSoldiers().size());
         if (getSoldiersStrength() > general.getSoldiersStrength()) {
+            setCoins(getCoins() + attackerCoinsWon);
+            general.setCoins(general.getCoins() - attackerCoinsWon);
             for (Soldier s : general.getSoldiers()) {
                 s.expDecrement();
                 if (s.getExperience() < 1) {
                     toRemove.add(s);
-
                 }
             }
             soldiers.removeAll(toRemove);
         } else if (getSoldiersStrength() < general.getSoldiersStrength()) {
+            general.setCoins(general.getCoins() + defenderCoinsWon);
+            setCoins(getCoins() - defenderCoinsWon);
             for (Soldier s : getSoldiers()) {
                 s.expDecrement();
                 if (s.getExperience() < 1) {
@@ -94,7 +114,11 @@ public class General {
             getSoldiers().remove(rand_int1);
             general.getSoldiers().remove(rand_int2);
         }
+        for (Secretary s : secretary) {
+            s.updateAttack(general,attackerCoinsWon, defenderCoinsWon);
+        }
     }
-
 }
+
+
 

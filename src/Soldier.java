@@ -1,5 +1,9 @@
-public class Soldier {
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class Soldier implements Serializable {
     private MilitaryRank militaryRank;
+    private ArrayList<Secretary> secretary = new ArrayList<>();
     private int experience;
     private int strength;
 
@@ -42,11 +46,19 @@ public class Soldier {
     }
 
     public void promote(){
-            setMilitaryRank(getMilitaryRank().getNextRank());
+        MilitaryRank oldRank = getMilitaryRank();
+        MilitaryRank newRank = getMilitaryRank().getNextRank();
+        setMilitaryRank(getMilitaryRank().getNextRank());
+        for (Secretary s : secretary) {
+            s.updateRank(oldRank, newRank);
+        }
         }
 
     public void expDecrement(){
         this.experience = experience - 1;
     }
 
+    public void attach(Secretary s) {
+        secretary.add(s);
+    }
 }
