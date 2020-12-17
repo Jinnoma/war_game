@@ -1,4 +1,4 @@
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -117,6 +117,25 @@ public class General implements Serializable {
         for (Secretary s : secretary) {
             s.updateAttack(general,attackerCoinsWon, defenderCoinsWon);
         }
+    }
+
+    public void save() throws IOException {
+        ObjectOutputStream objectOutputStream;
+        try (FileOutputStream fileOutputStream = new FileOutputStream("war.txt")) {
+            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        }
+        objectOutputStream.writeObject();
+        objectOutputStream.flush();
+        objectOutputStream.close();
+    }
+
+    public void load() throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream
+                = new FileInputStream("war.txt");
+        ObjectInputStream objectInputStream
+                = new ObjectInputStream(fileInputStream);
+        general = (General) objectInputStream.readObject();
+        objectInputStream.close();
     }
 }
 
