@@ -120,22 +120,36 @@ public class General implements Serializable {
     }
 
     public void save() throws IOException {
-        ObjectOutputStream objectOutputStream;
-        try (FileOutputStream fileOutputStream = new FileOutputStream("war.txt")) {
-            objectOutputStream = new ObjectOutputStream(fileOutputStream);
+        try {
+            FileOutputStream fileOut = new FileOutputStream("war.txt");
+            ObjectOutputStream objectOut = new ObjectOutputStream(fileOut);
+            objectOut.writeObject(this);
+            objectOut.close();
+            System.out.println("The Object  was succesfully written to a file");
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
-        objectOutputStream.writeObject();
-        objectOutputStream.flush();
-        objectOutputStream.close();
     }
 
     public void load() throws IOException, ClassNotFoundException {
-        FileInputStream fileInputStream
-                = new FileInputStream("war.txt");
-        ObjectInputStream objectInputStream
-                = new ObjectInputStream(fileInputStream);
-        general = (General) objectInputStream.readObject();
-        objectInputStream.close();
+        try {
+
+            //Read from the stored file
+            FileInputStream fileInputStream = new FileInputStream(new File(
+                    "war.txt"));
+            ObjectInputStream input = new ObjectInputStream(fileInputStream);
+            General general = (General) input.readObject();
+            System.out.println(general.getCoins());
+            input.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }
 
