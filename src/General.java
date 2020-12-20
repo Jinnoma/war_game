@@ -88,7 +88,7 @@ public class General implements Serializable {
         return soldiersStrength;
     }
 
-    public void killRandom(){
+    public void killRandom() {
         Random rand = new Random();
         int rand_sold = rand.nextInt(soldiers.size());
         getSoldiers().remove(rand_sold);
@@ -99,6 +99,7 @@ public class General implements Serializable {
             s.expDecrement();
         }
     }
+
     public void remove() {
         ArrayList<Soldier> toRemove = new ArrayList<>();
         for (Soldier s : getSoldiers()) {
@@ -110,7 +111,7 @@ public class General implements Serializable {
     }
 
 
-        public void attack(General general) {
+    public void attack(General general) {
         int attackerCoinsWon = general.getCoins() * 10 / 100;
         int defenderCoinsWon = getCoins() * 10 / 100;
         if (getSoldiersStrength() > general.getSoldiersStrength()) {
@@ -118,19 +119,17 @@ public class General implements Serializable {
             general.setCoins(general.getCoins() - attackerCoinsWon);
             general.expDecrement();
             general.remove();
-            }
-        else if (getSoldiersStrength() < general.getSoldiersStrength()) {
+        } else if (getSoldiersStrength() < general.getSoldiersStrength()) {
             general.setCoins(general.getCoins() + defenderCoinsWon);
             setCoins(getCoins() - defenderCoinsWon);
             this.expDecrement();
             this.remove();
-            }
-        else {
+        } else {
             this.killRandom();
             general.killRandom();
         }
         for (Secretary s : secretary) {
-            s.updateAttack(general,attackerCoinsWon, defenderCoinsWon);
+            s.updateAttack(general, attackerCoinsWon, defenderCoinsWon);
         }
     }
 
