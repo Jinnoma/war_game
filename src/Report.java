@@ -1,16 +1,10 @@
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class Report extends Secretary implements Serializable {
     public Report(General general) {
         this.general = general;
         this.general.attach(this);
     }
-    public Report(Soldier soldier) {
-        this.soldier = soldier;
-        this.soldier.attach(this);
-    }
-
 
     @Override
     public void updateSoldiers() {
@@ -20,10 +14,6 @@ public class Report extends Secretary implements Serializable {
                 + " coins, " + general.getCoins() + " coins left");
     }
 
-    //    @Override
-//    public void updateCoins(){
-//        System.out.println("General " + general.getName() + " have coins " + general.getCoins());
-//    }
     @Override
     public void updateMilitaryTraining(int cost, int soldierIndexes) {
         System.out.println("General " + general.getName() + " gets military training with " + soldierIndexes + " soldiers for "
@@ -54,9 +44,4 @@ public class Report extends Secretary implements Serializable {
         }
     }
 
-    @Override
-    public void updateRank(MilitaryRank oldRank, MilitaryRank newRank) {
-        System.out.println("Soldier promote from rank" + oldRank + " to new rank" + newRank);
-
-    }
 }

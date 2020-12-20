@@ -46,19 +46,11 @@ public class Soldier implements Serializable {
     }
 
     public void promote(){
-        MilitaryRank oldRank = getMilitaryRank();
-        MilitaryRank newRank = getMilitaryRank().getNextRank();
         setMilitaryRank(getMilitaryRank().getNextRank());
-        for (Secretary s : secretary) {
-            s.updateRank(oldRank, newRank);
-        }
         }
 
     public void expDecrement(){
         this.experience = experience - 1;
     }
 
-    public void attach(Secretary s) {
-        secretary.add(s);
-    }
 }

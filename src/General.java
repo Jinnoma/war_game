@@ -8,8 +8,15 @@ public class General implements Serializable {
     private int coins;
     private Soldier soldier;
     private String name;
+    private String filename;
 
-    public General() {
+    public General(String filename) throws IOException, ClassNotFoundException {
+        FileInputStream fileInputStream = new FileInputStream(filename);
+        ObjectInputStream input = new ObjectInputStream(fileInputStream);
+        General general = (General) input.readObject();
+        this.soldiers = general.soldiers;
+        this.coins = general.coins;
+        this.name = general.name;
     }
 
     public General(String name, int coins) {
@@ -30,8 +37,6 @@ public class General implements Serializable {
             throw new IllegalArgumentException("Not enough money");
         }
         this.coins = coins;
-
-
     }
 
     public void attach(Secretary s) {
@@ -83,36 +88,46 @@ public class General implements Serializable {
         return soldiersStrength;
     }
 
-    public void attack(General general) {
+    public void killRandom(){
         Random rand = new Random();
+        int rand_sold = rand.nextInt(soldiers.size());
+        getSoldiers().remove(rand_sold);
+    }
+
+    public void expDecrement() {
+        for (Soldier s : getSoldiers()) {
+            s.expDecrement();
+        }
+    }
+    public void remove() {
         ArrayList<Soldier> toRemove = new ArrayList<>();
+        for (Soldier s : getSoldiers()) {
+            if (s.getExperience() < 1) {
+                toRemove.add(s);
+            }
+        }
+        soldiers.removeAll(toRemove);
+    }
+
+
+        public void attack(General general) {
         int attackerCoinsWon = general.getCoins() * 10 / 100;
         int defenderCoinsWon = getCoins() * 10 / 100;
-        int rand_int1 = rand.nextInt(getSoldiers().size());
-        int rand_int2 = rand.nextInt(general.getSoldiers().size());
         if (getSoldiersStrength() > general.getSoldiersStrength()) {
             setCoins(getCoins() + attackerCoinsWon);
             general.setCoins(general.getCoins() - attackerCoinsWon);
-            for (Soldier s : general.getSoldiers()) {
-                s.expDecrement();
-                if (s.getExperience() < 1) {
-                    toRemove.add(s);
-                }
+            general.expDecrement();
+            general.remove();
             }
-            soldiers.removeAll(toRemove);
-        } else if (getSoldiersStrength() < general.getSoldiersStrength()) {
+        else if (getSoldiersStrength() < general.getSoldiersStrength()) {
             general.setCoins(general.getCoins() + defenderCoinsWon);
             setCoins(getCoins() - defenderCoinsWon);
-            for (Soldier s : getSoldiers()) {
-                s.expDecrement();
-                if (s.getExperience() < 1) {
-                    toRemove.add(s);
-                }
+            this.expDecrement();
+            this.remove();
             }
-            soldiers.removeAll(toRemove);
-        } else {
-            getSoldiers().remove(rand_int1);
-            general.getSoldiers().remove(rand_int2);
+        else {
+            this.killRandom();
+            general.killRandom();
         }
         for (Secretary s : secretary) {
             s.updateAttack(general,attackerCoinsWon, defenderCoinsWon);
@@ -129,26 +144,6 @@ public class General implements Serializable {
 
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-
-    public void load() throws IOException, ClassNotFoundException {
-        try {
-
-            //Read from the stored file
-            FileInputStream fileInputStream = new FileInputStream(new File(
-                    "war.txt"));
-            ObjectInputStream input = new ObjectInputStream(fileInputStream);
-            General general = (General) input.readObject();
-            System.out.println(general.getCoins());
-            input.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }
